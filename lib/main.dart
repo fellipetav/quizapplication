@@ -42,15 +42,15 @@ class QuizAppState extends State<QuizApp> {
       }
     ];
 
-    List<Widget> answers = [];
+    List<String> answersList = questions[_selectedQuestion].cast()['answers'];
+    List<Widget> answersWidgetsList = answersList
+        .map((eachAnswerText) => Answer(eachAnswerText, _answer))
+        .toList();
 
-    /// The code snippet `for (String answerText in questions[_selectedQuestion].cast()['answers']) {
-    ///       answers.add(Answer(answerText, _answer));
-    ///     }` is iterating over the list of answers for the current question and adding each answer as
-    /// an `Answer` widget to the `answers` list.
-    for (String answerText in questions[_selectedQuestion].cast()['answers']) {
-      answers.add(Answer(answerText, _answer));
-    }
+    // /// Iterating over the list of answers for the current question and adding each answer as an `Answer` Widget to the `answersList`.
+    // for (String answerText in answers) {
+    //   answersList.add(Answer(answerText, _answer));
+    // }
 
     return MaterialApp(
       home: Scaffold(
@@ -61,7 +61,7 @@ class QuizAppState extends State<QuizApp> {
           children: <Widget>[
             // Question(questions[elementNumberFromList][Key].toString())
             Question(questions[_selectedQuestion]['question'].toString()),
-            ...answers,
+            ...answersWidgetsList,
           ],
         ),
       ),

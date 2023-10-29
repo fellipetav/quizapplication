@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import './answer.dart';
-import './question.dart';
+import 'result_widget.dart';
+import 'answer_widget.dart';
+import 'question_widget.dart';
 
 main() => runApp(const QuizApp());
 
@@ -19,8 +20,8 @@ class QuizAppState extends State<QuizApp> {
       'answers': ['Red', 'Blue', 'Green', 'Yellow'],
     },
     {
-      'question': 'What is your first pet\'s name?',
-      'answers': ['Yoshi', 'Pakito', 'Bethoven', 'Hulk'],
+      'question': 'What is your last pet\'s name?',
+      'answers': ['Yoshi', 'Lollo', 'Bethoven', 'Hulk'],
     },
     {
       'question': 'Where is your hometown?',
@@ -41,6 +42,9 @@ class QuizAppState extends State<QuizApp> {
     }
   }
 
+  /// The `isCurrentQuestionIndexValid` method is checking if the current question index is valid. It
+  /// returns a boolean value indicating whether the current question index is less than the length of
+  /// the `_questions` list.
   bool get isCurrentQuestionIndexValid {
     return _currentQuestionIndex < _questions.length;
   }
@@ -71,18 +75,12 @@ class QuizAppState extends State<QuizApp> {
         body: isCurrentQuestionIndexValid
             ? Column(
                 children: <Widget>[
-                  // Question(questions[elementNumberFromList][Key].toString())
                   Question(
                       _questions[_currentQuestionIndex]['question'].toString()),
                   ...answersWidgetsList,
                 ],
               )
-            : const Center(
-                child: Text(
-                  'Good job!',
-                  style: TextStyle(fontSize: 28),
-                ),
-              ),
+            : const Result(),
       ),
     );
   }

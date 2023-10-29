@@ -10,33 +10,56 @@ class QuizAppState extends State<QuizApp> {
   // esse é o meu estado que quero controlar
   var _currentQuestionIndex = 0;
 
+  var _totalScore = 0;
+
   /// List of `questions` as a Map, which each represents a question and its
   /// corresponding answers (two key-value pairs): 'question' and 'answers'. The value of
   /// 'question' is a string representing the question, and the value of 'answers' is a list of
   /// strings representing the possible answers to the question.
   final List<Map<String, Object>> _questions = const [
     {
-      'question': 'What is your favorite color?',
-      'answers': ['Red', 'Blue', 'Green', 'Yellow'],
+      'question': 'Who discovered the electricity?',
+      'answers': [
+        {'text': 'Thomas Edison', 'score': 5},
+        {'text': 'Benjamin Franklin', 'score': 10},
+        {'text': 'Nikola Tesla', 'score': 3},
+        {'text': 'Alexander Graham Bell', 'score': 1},
+      ],
     },
     {
-      'question': 'What is your last pet\'s name?',
-      'answers': ['Yoshi', 'Lollo', 'Bethoven', 'Hulk'],
+      'question':
+          'Which economic system was in place in soviet nation during the URSS?',
+      'answers': [
+        {'text': 'Communism', 'score': 10},
+        {'text': 'Socialism', 'score': 1},
+        {'text': 'Capitalism', 'score': 3},
+        {'text': 'Republic of Social Communism', 'score': 5},
+      ],
     },
     {
-      'question': 'Where is your hometown?',
-      'answers': ['Recife', 'Salvador', 'Aracaju', 'Rio de Janeiro'],
+      'question': 'Is it possible to travel back in time and change the past?',
+      'answers': [
+        {
+          'text':
+              'Yes, but it depends on which time branch you would interfere.',
+          'score': 5
+        },
+        {'text': 'It\'s not possible travel back in time.', 'score': 3},
+        {'text': 'Yes, theoretically.', 'score': 10},
+        {'text': 'If you change the past you\'ll change the past.', 'score': 1},
+      ],
     }
   ];
 
-  // Esse método é o que manipulará a mudança do valor de `_selectedQuestion` e, por isso, ele precisa vir para dentro dessa classe que vai gerenciar o estado.
+  // Esse método é o que manipulará a mudança do valor de [_currentQuestionIndex] e, por isso, ele precisa vir para dentro dessa classe que vai gerenciar o estado.
   // Precisaremos criar um método que será chamado nos onPressure dos botões.
   // Ideal criar o método dentro da própria classe, encapsulado nela.
-  void _answer() {
+  void _onAnswer(int partialScore) {
     // Preciso colocar esse trecho que está alterando a variável dentro de um setState, para ele ficar monitorando que houve a mudança e reagir modificando a interface.
     if (isCurrentQuestionIndexValid) {
       setState(() {
         _currentQuestionIndex++;
+        _totalScore += partialScore;
         // print(_selectedQuestion);
       });
     }
@@ -52,13 +75,20 @@ class QuizAppState extends State<QuizApp> {
   // Este método build(BuildContext context) precisa vir para cá pois ela é uma árvore de widgets que dependerá do estado para ser renderizada.
   @override
   Widget build(BuildContext context) {
-    List<String> answersOptionsList = isCurrentQuestionIndexValid
+    List<Map<String, Object>> answersOptionsList = isCurrentQuestionIndexValid
         ? _questions[_currentQuestionIndex].cast()['answers']
         : [];
 
-    // Abordagem mais declaraiva (ou funcional)
+    // Abordagem mais declarativa (ou funcional)
     List<Widget> answersOptionsWidgetList = answersOptionsList
-        .map((eachAnswerText) => Answer(eachAnswerText, _answer))
+        .map(
+          (eachAnswerText) => Answer(
+            eachAnswerText['text'] as String,
+            () => _onAnswer(
+              int.parse(eachAnswerText['score'].toString()),
+            ),
+          ),
+        )
         .toList();
 
     // Abordagem mais imperativa
@@ -78,7 +108,7 @@ class QuizAppState extends State<QuizApp> {
                     _questions[_currentQuestionIndex]['question'].toString(),
                 answersOptionsWidgetList: answersOptionsWidgetList,
               )
-            : const Result(),
+            : Result(score: _totalScore),
       ),
     );
   }

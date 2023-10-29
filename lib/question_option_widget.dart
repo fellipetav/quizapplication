@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class Question extends StatelessWidget {
+class QuestionOptions extends StatelessWidget {
   final String text;
 
-  const Question(this.text, {super.key});
+  const QuestionOptions(this.text, {super.key});
 
   @override
   Widget build(BuildContext context) {

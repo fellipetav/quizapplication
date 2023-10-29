@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'questions_widget.dart';
 import 'result_widget.dart';
 import 'answer_widget.dart';
-import 'question_widget.dart';
 
 main() => runApp(const QuizApp());
 
@@ -52,12 +52,12 @@ class QuizAppState extends State<QuizApp> {
   // Este método build(BuildContext context) precisa vir para cá pois ela é uma árvore de widgets que dependerá do estado para ser renderizada.
   @override
   Widget build(BuildContext context) {
-    List<String> answersList = isCurrentQuestionIndexValid
+    List<String> answersOptionsList = isCurrentQuestionIndexValid
         ? _questions[_currentQuestionIndex].cast()['answers']
         : [];
 
     // Abordagem mais declaraiva (ou funcional)
-    List<Widget> answersWidgetsList = answersList
+    List<Widget> answersOptionsWidgetList = answersOptionsList
         .map((eachAnswerText) => Answer(eachAnswerText, _answer))
         .toList();
 
@@ -73,12 +73,10 @@ class QuizAppState extends State<QuizApp> {
           title: const Text('QUESTIONS'),
         ),
         body: isCurrentQuestionIndexValid
-            ? Column(
-                children: <Widget>[
-                  Question(
-                      _questions[_currentQuestionIndex]['question'].toString()),
-                  ...answersWidgetsList,
-                ],
+            ? Questions(
+                questionStatement:
+                    _questions[_currentQuestionIndex]['question'].toString(),
+                answersOptionsWidgetList: answersOptionsWidgetList,
               )
             : const Result(),
       ),

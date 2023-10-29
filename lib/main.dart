@@ -60,9 +60,15 @@ class QuizAppState extends State<QuizApp> {
       setState(() {
         _currentQuestionIndex++;
         _totalScore += partialScore;
-        // print(_selectedQuestion);
       });
     }
+  }
+
+  void resetQuiz() {
+    setState(() {
+      _currentQuestionIndex = 0;
+      _totalScore = 0;
+    });
   }
 
   /// The `isCurrentQuestionIndexValid` method is checking if the current question index is valid. It
@@ -108,7 +114,10 @@ class QuizAppState extends State<QuizApp> {
                     _questions[_currentQuestionIndex]['question'].toString(),
                 answersOptionsWidgetList: answersOptionsWidgetList,
               )
-            : Result(score: _totalScore),
+            : Result(
+                score: _totalScore,
+                resetQuestions: resetQuiz,
+              ),
       ),
     );
   }

@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 class Result extends StatelessWidget {
   final int score;
 
+  final Function() resetQuestions;
+
   const Result({
     super.key,
     required this.score,
+    required this.resetQuestions,
   });
 
   // Preciso de um getter para definir a exibição em função da pontuação
@@ -29,11 +32,29 @@ class Result extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        resultMessage,
-        style: const TextStyle(fontSize: 28),
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: Text(
+            resultMessage,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 28),
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.all(24),
+        ),
+        TextButton(
+          onPressed: resetQuestions,
+          child: const Text(
+            'Reset quiz',
+            style: TextStyle(
+              fontSize: 16,
+            ),
+          ),
+        )
+      ],
     );
   }
 }
